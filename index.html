@@ -12,16 +12,17 @@
         body {
             font-family: 'Noto Serif TC', serif;
             background: #0f172a;
-            overflow-x: hidden;
+            /* 確保在任何裝置上都至少有螢幕高度，並垂直居中 */
             min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #fff;
-            padding: 20px;
+            padding: 1rem; /* 增加外部留白 */
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
         }
 
         /* 背景漸層動畫 */
@@ -41,17 +42,21 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
+            /* 呼吸浮動動畫 */
             animation: float 6s ease-in-out infinite;
-            z-index: 10;
+            width: 100%;
+            /* 限制最大寬度，確保在電腦上不會太寬，手機上則是滿版 */
+            max-width: 450px; 
         }
         
+        /* 聚光燈層 */
         .glass-card::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: radial-gradient(
-                800px circle at var(--x, 50%) var(--y, 50%), 
-                rgba(255, 255, 255, 0.15), 
+                600px circle at var(--x, 50%) var(--y, 50%), 
+                rgba(255, 255, 255, 0.1), 
                 transparent 40%
             );
             z-index: 0;
@@ -62,21 +67,21 @@
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
         }
 
         /* Love Battery */
         .love-battery {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 1.25rem;
+            right: 1.25rem;
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 10px;
+            font-size: 0.75rem; /* text-xs */
             color: #4ade80;
-            z-index: 2;
+            z-index: 20;
         }
 
         /* 金色文字特效 */
@@ -136,11 +141,15 @@
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(5px);
             transition: opacity 0.8s ease-out;
+            padding: 20px;
         }
         #main-card {
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 1s ease, transform 1s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
         .show-card { opacity: 1 !important; transform: scale(1) !important; }
         .hidden-screen { opacity: 0 !important; pointer-events: none !important; }
@@ -160,6 +169,9 @@
             transition: transform 0.2s;
             cursor: pointer;
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);
+            /* 防止手機上長按選取 */
+            user-select: none; 
+            -webkit-user-select: none;
         }
         .unlock-btn:active { transform: scale(0.95); }
 
@@ -176,7 +188,7 @@
             transition: max-height 0.8s ease-in-out, opacity 0.8s ease-in-out;
             opacity: 0;
         }
-        .secret-revealed { max-height: 400px; opacity: 1; }
+        .secret-revealed { max-height: 500px; opacity: 1; }
         
         .typing-cursor::after {
             content: '|';
@@ -197,7 +209,7 @@
 
     <!-- 1. 封面 -->
     <div id="intro-screen">
-        <div class="glass-card p-10 rounded-2xl text-center border border-yellow-500/20 max-w-sm w-full mx-6 transform transition hover:scale-105 duration-500" onclick="openCard(event)">
+        <div class="glass-card p-10 rounded-2xl text-center border border-yellow-500/20 w-full max-w-sm transform transition hover:scale-105 duration-500" onclick="openCard(event)">
             <div class="text-6xl mb-4 animate-bounce">💌</div>
             <p class="text-gray-400 tracking-[0.3em] text-xs uppercase mb-3">Priority Mail</p>
             <h1 class="text-3xl font-bold text-white mb-6">
@@ -210,30 +222,30 @@
     </div>
 
     <!-- 2. 主卡片 -->
-    <main id="main-card" class="w-full max-w-md p-6 mx-4">
-        <div id="spotlight-card" class="glass-card rounded-2xl p-8 text-center relative overflow-hidden">
+    <main id="main-card">
+        <div id="spotlight-card" class="glass-card rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
             
             <div class="love-battery">
                 <i class="fas fa-bolt animate-pulse"></i> 
                 <span>Love: 100%</span>
             </div>
 
-            <div class="mb-6 mt-4 relative z-10">
+            <div class="mb-5 mt-4 relative z-10">
                 <p class="text-[10px] tracking-[0.4em] uppercase text-gray-300 mb-2">My Only One</p>
-                <h1 class="text-4xl font-bold mb-2">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">
                     <span class="gold-text">Merry Christmas</span>
                 </h1>
                 <div class="text-2xl mt-2 animate-pulse">🎄✨</div>
             </div>
 
-            <div class="space-y-5 mb-8 text-gray-100 leading-relaxed font-medium relative z-10">
-                <p class="text-2xl font-bold text-white drop-shadow-lg">菜刀，聖誕快樂！</p>
-                <p class="opacity-90 text-lg">
+            <div class="space-y-4 mb-6 text-gray-100 leading-relaxed font-medium relative z-10">
+                <p class="text-xl md:text-2xl font-bold text-white drop-shadow-lg">菜刀，聖誕快樂！</p>
+                <p class="opacity-90 text-base md:text-lg">
                     最好的禮物不是在任何東西，<br>
                     而是此刻在我眼前的你！😍
                 </p>
-                <div class="py-2">
-                    <p class="opacity-80 text-sm">
+                <div class="py-1">
+                    <p class="opacity-80 text-sm md:text-base">
                         祝我們的感情，<br>
                         跟聖誕老公公的年齡一樣久~
                     </p>
@@ -241,18 +253,20 @@
                 <p class="text-pink-300 font-bold text-xl mt-2" style="font-family: 'Parisienne', cursive;">Love you forever</p>
             </div>
 
-            <div class="border-t border-white/10 py-6 relative z-10">
+            <!-- 時間區域 -->
+            <div class="border-t border-white/10 py-5 relative z-10">
                 <p class="text-[10px] text-gray-400 mb-3 tracking-widest uppercase">Time Together</p>
                 <div class="grid grid-cols-4 gap-2 text-center">
-                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="days" class="block text-xl font-bold text-yellow-400">0</span><span class="text-[9px] text-gray-400">DAYS</span></div>
-                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="hours" class="block text-xl font-bold text-yellow-400">0</span><span class="text-[9px] text-gray-400">HRS</span></div>
-                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="minutes" class="block text-xl font-bold text-yellow-400">0</span><span class="text-[9px] text-gray-400">MINS</span></div>
-                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="seconds" class="block text-xl font-bold text-yellow-400">0</span><span class="text-[9px] text-gray-400">SECS</span></div>
+                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="days" class="block text-lg md:text-xl font-bold text-yellow-400">0</span><span class="text-[8px] md:text-[9px] text-gray-400">DAYS</span></div>
+                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="hours" class="block text-lg md:text-xl font-bold text-yellow-400">0</span><span class="text-[8px] md:text-[9px] text-gray-400">HRS</span></div>
+                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="minutes" class="block text-lg md:text-xl font-bold text-yellow-400">0</span><span class="text-[8px] md:text-[9px] text-gray-400">MINS</span></div>
+                    <div class="bg-black/20 rounded-lg p-2 border border-white/5"><span id="seconds" class="block text-lg md:text-xl font-bold text-yellow-400">0</span><span class="text-[8px] md:text-[9px] text-gray-400">SECS</span></div>
                 </div>
-                <div class="mt-4 text-[10px] text-gray-500 italic font-mono">Since 2025.11.14</div>
+                <div class="mt-3 text-[10px] text-gray-500 italic font-mono">Since 2025.11.14</div>
             </div>
 
-            <div class="border-t border-white/10 pt-6 relative z-10">
+            <!-- 解鎖區域 -->
+            <div class="border-t border-white/10 pt-5 relative z-10">
                 <div id="lock-container" class="transition-all duration-500">
                     <p class="text-xs text-red-300 mb-4 animate-pulse bg-red-900/30 inline-block px-2 py-1 rounded">⚠️ 警告：內容過甜，限本人查看</p>
                     <div class="unlock-btn" id="unlockBtn" onmousedown="startUnlock(event)" onmouseup="stopUnlock()" onmouseleave="stopUnlock()" ontouchstart="startUnlock(event)" ontouchend="stopUnlock()">
@@ -282,7 +296,7 @@
             setTimeout(() => { cardMain.classList.add('show-card'); }, 100);
         }
 
-        // --- 2. Spotlight ---
+        // --- 2. Spotlight (聚光燈) - 支援 Touch & Mouse ---
         const card = document.getElementById('spotlight-card');
         const updateSpotlight = (x, y) => {
             card.style.setProperty('--x', `${x}px`);
@@ -293,8 +307,10 @@
             updateSpotlight(e.clientX - rect.left, e.clientY - rect.top);
         });
         card.addEventListener('touchmove', (e) => {
+            // Touch move 不會阻止卷軸滾動，但會更新光影
             const rect = card.getBoundingClientRect();
-            updateSpotlight(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+            const touch = e.touches[0];
+            updateSpotlight(touch.clientX - rect.left, touch.clientY - rect.top);
         });
 
         // --- 3. 計時器 ---
@@ -339,8 +355,19 @@
             const heart = document.createElement('div');
             heart.className = 'click-heart';
             heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            heart.style.left = (event.clientX - 10) + 'px';
-            heart.style.top = (event.clientY - 10) + 'px';
+            
+            // 兼容 Touch 和 Mouse 事件
+            let clientX, clientY;
+            if (event.touches && event.touches.length > 0) {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+            } else {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            }
+
+            heart.style.left = (clientX - 10) + 'px';
+            heart.style.top = (clientY - 10) + 'px';
             heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 1000);
@@ -353,15 +380,23 @@
         circle.style.strokeDasharray = `${circumference} ${circumference}`;
         circle.style.strokeDashoffset = circumference;
         function setProgress(percent) { circle.style.strokeDashoffset = circumference - (percent / 100) * circumference; }
+        
         function startUnlock(e) {
             if (!isLocked) return;
-            e.preventDefault(); e.stopPropagation();
+            e.stopPropagation();
+            // 防止右鍵選單
+            if (e.type === 'contextmenu') e.preventDefault();
+            
             let progress = 0;
             const btn = document.getElementById('unlockBtn');
             btn.style.transform = "scale(0.9)";
+            
             holdTimer = setInterval(() => {
-                progress += 4; setProgress(progress);
-                if (progress % 20 === 0) spawnHeart({clientX: e.touches ? e.touches[0].clientX : e.clientX, clientY: e.touches ? e.touches[0].clientY : e.clientY});
+                progress += 4; 
+                setProgress(progress);
+                if (progress % 20 === 0) {
+                     spawnHeart(e); // 傳入事件物件
+                }
                 if (progress >= 100) { clearInterval(holdTimer); unlockSuccess(); }
             }, 30);
         }
